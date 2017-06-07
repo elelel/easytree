@@ -28,3 +28,13 @@ for (const auto& s : breadth_first<std::string>(tree)) {
 // ...
 ```
 
+## Use STL
+```
+// ...
+auto found = std::find_if(breadth_first<std::string>(tree).begin(),
+                          breadth_first<std::string>(tree).end(),
+                          [] (const decltype(tree)& n) {
+                            return **n == "Subchild 1";
+                          });
+// ...
+```
