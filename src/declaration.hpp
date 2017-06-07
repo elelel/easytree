@@ -22,10 +22,6 @@ namespace easytree {
   template <typename T>
   std::shared_ptr<tree::node<T>> operator<<(std::shared_ptr<tree::node<T>> lhs,
                                              const std::shared_ptr<tree::node<T>>& rhs);
-  // Create same level node
-  template <typename T>
-  std::shared_ptr<tree::node<T>> operator|(std::shared_ptr<tree::node<T>> lhs,
-                                            const std::shared_ptr<tree::node<T>>& rhs);
   namespace view {
     template <typename Node>
     struct breadth_first;
@@ -49,15 +45,12 @@ namespace easytree {
       // Create subnode
       friend std::shared_ptr<tree::node<T>> operator<<<T>(std::shared_ptr<tree::node<T>> lhs,
                                                          const std::shared_ptr<tree::node<T>>& rhs);
-      // Create same level node
-      friend std::shared_ptr<tree::node<T>> operator|<T>(std::shared_ptr<tree::node<T>> lhs,
-                                                        const std::shared_ptr<tree::node<T>>& rhs);
-      
       friend struct view::breadth_first<type>;
       friend struct view::breadth_first_iterator<type>;
       friend struct view::const_breadth_first_iterator<type>;
 
       node();
+      // Construct node with value
       node(T value);
       // Add child if doesn't exist
       void add_child(const type_ptr& rhs);
@@ -110,6 +103,7 @@ namespace easytree {
       type& operator++();
 
       reference operator*();
+      // Return current node's tree level
       size_t level() const;
 
     private:
