@@ -1,5 +1,7 @@
 #include <catch.hpp>
 
+#include <algorithm>
+
 #include <easytree/tree>
 #include <easytree/breadth_first>
 
@@ -26,6 +28,16 @@ SCENARIO("TDD") {
       }
       std::vector<int> expected{1, 2, 3, 4, 5, 8, 6, 7, 9, 12, 10, 11};
       REQUIRE(actual == expected);
+
+      THEN("Test STL find_if") {
+        auto actual = std::find_if(breadth_first<int>(tree).begin(),
+                                   breadth_first<int>(tree).end(),
+                                   [] (const decltype(tree)& n) {
+                                     return **n == 11;
+                                   });
+        REQUIRE(actual != breadth_first<int>(tree).end());
+        REQUIRE(actual.level() == 3);
+      }
     }
   }
   

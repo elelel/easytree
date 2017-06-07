@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <queue>
+#include <tuple>
 #include <vector>
 
 // Predeclare
@@ -109,9 +110,10 @@ namespace easytree {
       type& operator++();
 
       reference operator*();
+      size_t level() const;
 
     private:
-      std::queue<typename Node::type_ptr> q_;
+      std::queue<std::tuple<typename Node::type_ptr, size_t>> q_;
     };
     
     template <typename T>

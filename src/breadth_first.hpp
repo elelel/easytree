@@ -47,7 +47,7 @@ namespace easytree {
     
     template <typename Node>
     breadth_first_iterator<Node>::breadth_first_iterator(typename Node::type_ptr n) {
-      q_.push(n);
+      q_.push({n, 0});
     }
   
     template <typename Node>
@@ -85,7 +85,8 @@ namespace easytree {
     template <typename Node>
     auto breadth_first_iterator<Node>::operator++() -> type& {
       if (q_.size() != 0) {
-        for (auto& c : q_.front()->children_) q_.push(c);
+        for (auto& c : std::get<0>(q_.front())->children_)
+          q_.push({c, std::get<1>(q_.front()) + 1});
         q_.pop();
       }
       return *this;
@@ -93,7 +94,12 @@ namespace easytree {
 
     template <typename Node>
     auto breadth_first_iterator<Node>::operator*() -> reference {
-      return q_.front();
+      return std::get<0>(q_.front());
+    }
+
+    template <typename Node>
+    size_t breadth_first_iterator<Node>::level() const {
+      return std::get<1>(q_.front());
     }
 
     
