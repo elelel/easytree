@@ -36,13 +36,11 @@ namespace easytree {
   std::shared_ptr<tree::node<T>> node(T value) {
     return std::make_shared<tree::node<T>>(value);
   }
+}
 
-  template <typename T>
-  std::shared_ptr<tree::node<T>> operator<<(std::shared_ptr<tree::node<T>> lhs,
-                                             const std::shared_ptr<tree::node<T>>& rhs) {
-    lhs->add_child(rhs);
-    return lhs;
-  }
-
-  
+template <typename T>
+std::shared_ptr<easytree::tree::node<T>> operator<<(std::shared_ptr<easytree::tree::node<T>> lhs,
+                                                    const std::shared_ptr<easytree::tree::node<T>>& rhs) {
+  lhs->add_child(rhs);
+  return lhs;
 }
