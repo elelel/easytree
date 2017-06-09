@@ -119,6 +119,7 @@ namespace easytree {
       type& operator++();
 
       reference operator*();
+      value_type operator*() const;
       // Return current node's tree level
       size_t level() const;
 
@@ -168,6 +169,7 @@ namespace easytree {
       type& operator++();
 
       reference operator*();
+      value_type operator*() const;
       // Return current node's tree level
       size_t level() const;
 

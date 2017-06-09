@@ -78,7 +78,19 @@ SCENARIO("TDD") {
         REQUIRE(actual != depth_first<int>(tree).end());
         REQUIRE(actual.level() == 3);
       }
-      
+    }
+
+    THEN("Test depth <--> breadth iterator conversion") {
+      for (auto b = breadth_first<int>(tree).begin();
+           b != breadth_first<int>(tree).end(); ++b) {
+        auto d = b.depth_first_iterator();
+        REQUIRE(*b == *d);
+      }
+      for (auto d = depth_first<int>(tree).begin();
+           d != depth_first<int>(tree).end(); ++d) {
+        auto b = d.breadth_first_iterator();
+        REQUIRE(*b == *d);
+      }
     }
   }
   

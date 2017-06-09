@@ -57,7 +57,7 @@ namespace easytree {
   
     template <typename Node>
     breadth_first_iterator<Node>::breadth_first_iterator(const view::depth_first_iterator<Node>& other) {
-      q_.push(*other);
+      q_.push({*other, other.level()});
     }
     
     template <typename Node>
@@ -94,6 +94,11 @@ namespace easytree {
 
     template <typename Node>
     auto breadth_first_iterator<Node>::operator*() -> reference {
+      return std::get<0>(q_.front());
+    }
+
+    template <typename Node>
+    auto breadth_first_iterator<Node>::operator*() const -> value_type {
       return std::get<0>(q_.front());
     }
 
