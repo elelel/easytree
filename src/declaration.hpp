@@ -18,10 +18,6 @@ namespace easytree {
   template <typename T>
   std::shared_ptr<tree::node<T>> node(T value);
   
-  // Create subnode
-  template <typename T>
-  std::shared_ptr<tree::node<T>> operator<<(std::shared_ptr<tree::node<T>> lhs,
-                                             const std::shared_ptr<tree::node<T>>& rhs);
   namespace view {
     template <typename Node>
     struct breadth_first;
@@ -31,6 +27,11 @@ namespace easytree {
     struct const_breadth_first_iterator;
   }
 }
+// Create subnode
+template <typename T>
+std::shared_ptr<easytree::tree::node<T>> operator<<(std::shared_ptr<easytree::tree::node<T>> lhs,
+ std::shared_ptr<easytree::tree::node<T>> rhs);
+
 
 // Declare
 namespace easytree {
@@ -44,7 +45,7 @@ namespace easytree {
 
       // Create subnode
       friend std::shared_ptr<tree::node<T>> operator<<<T>(std::shared_ptr<tree::node<T>> lhs,
-                                                         const std::shared_ptr<tree::node<T>>& rhs);
+                                                         std::shared_ptr<tree::node<T>> rhs);
       friend struct view::breadth_first<type>;
       friend struct view::breadth_first_iterator<type>;
       friend struct view::const_breadth_first_iterator<type>;
@@ -52,6 +53,7 @@ namespace easytree {
       node();
       // Construct node with value
       node(T value);
+      
       // Add child if doesn't exist
       void add_child(const type_ptr& rhs);
       reference operator*();
@@ -59,7 +61,7 @@ namespace easytree {
       const std::vector<type_ptr>& children() const;
     private:
       value_type value_;
-      type_ptr parent_;
+      //      type_ptr parent_;
       std::vector<type_ptr> children_;
     };
   }
