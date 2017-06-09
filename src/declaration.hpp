@@ -55,10 +55,10 @@ namespace easytree {
                                                          const std::shared_ptr<tree::node<T>>& rhs);
       friend struct view::breadth_first<type>;
       friend struct view::breadth_first_iterator<type>;
-      friend struct view::const_breadth_first_iterator<type>;
+      friend struct view::const_breadth_first_iterator<const type>;
       friend struct view::depth_first<type>;
       friend struct view::depth_first_iterator<type>;
-      friend struct view::const_depth_first_iterator<type>;
+      friend struct view::const_depth_first_iterator<const type>;
 
       node();
       // Construct node with value
@@ -80,8 +80,7 @@ namespace easytree {
     template <typename Node>
     struct breadth_first {
       using iterator = breadth_first_iterator<Node>;
-      // TODO: Write specialized const iterator, returning const&
-      using const_iterator = breadth_first_iterator<const Node>;
+      using const_iterator = const_breadth_first_iterator<const Node>;
 
       iterator begin();
       const_iterator begin() const;
@@ -119,7 +118,7 @@ namespace easytree {
       type& operator++();
 
       reference operator*();
-      value_type operator*() const;
+      const value_type operator*() const;
       // Return current node's tree level
       size_t level() const;
 
@@ -127,6 +126,38 @@ namespace easytree {
       std::queue<std::tuple<typename Node::type_ptr, size_t>> q_;
     };
 
+    template <typename Node>
+    struct const_breadth_first_iterator {
+      using type = const_breadth_first_iterator<Node>;
+      using iterator_category = std::forward_iterator_tag;
+      using value_type = typename Node::type_ptr;
+      using reference = const value_type&;
+      using pointer = value_type*;
+      using difference_type = ptrdiff_t;
+
+      const_breadth_first_iterator();
+      const_breadth_first_iterator(typename Node::type_ptr);
+      const_breadth_first_iterator(const type& other);
+      const_breadth_first_iterator(const const_depth_first_iterator<Node>& other);
+      const_breadth_first_iterator(type&& other);
+      auto depth_first_iterator() -> const_depth_first_iterator<Node>;
+      void swap(type& other);
+      type& operator=(const type& other);
+
+      bool operator==(const type& other) const;
+      bool operator!=(const type& other) const;
+
+      type& operator++();
+
+      const reference operator*() const;
+
+      // Return current node's tree level
+      size_t level() const;
+
+    private:
+      std::queue<std::tuple<const typename Node::type_ptr, size_t>> q_;
+    };
+    
     template <typename Node>
     struct depth_first {
       using iterator = depth_first_iterator<Node>;
@@ -142,7 +173,6 @@ namespace easytree {
       depth_first(typename Node::type_ptr n);
     private:
       typename Node::type_ptr n_;
-
     };
 
     template <typename Node>
@@ -150,7 +180,7 @@ namespace easytree {
       using type = depth_first_iterator<Node>;
       using iterator_category = std::forward_iterator_tag;
       using value_type = typename Node::type_ptr;
-      using reference = value_type&;
+      using reference = const value_type&;
       using pointer = value_type*;
       using difference_type = ptrdiff_t;
 
@@ -169,12 +199,44 @@ namespace easytree {
       type& operator++();
 
       reference operator*();
-      value_type operator*() const;
+      const value_type operator*() const;
       // Return current node's tree level
       size_t level() const;
 
     private:
       std::stack<std::tuple<typename Node::type_ptr, size_t>> q_;
+    };
+    
+
+    template <typename Node>
+    struct const_depth_first_iterator {
+      using type = const_depth_first_iterator<Node>;
+      using iterator_category = std::forward_iterator_tag;
+      using value_type = typename Node::type_ptr;
+      using reference = const value_type&;
+      using pointer = value_type*;
+      using difference_type = ptrdiff_t;
+
+      const_depth_first_iterator();
+      const_depth_first_iterator(typename Node::type_ptr);
+      const_depth_first_iterator(const type& other);
+      const_depth_first_iterator(const const_breadth_first_iterator<Node>& other);
+      const_depth_first_iterator(type&& other);
+      auto breadth_first_iterator() -> const_breadth_first_iterator<Node>;
+      void swap(type& other);
+      type& operator=(const type& other);
+
+      bool operator==(const type& other) const;
+      bool operator!=(const type& other) const;
+
+      type& operator++();
+
+      reference operator*() const;
+      // Return current node's tree level
+      size_t level() const;
+
+    private:
+      std::stack<std::tuple<const typename Node::type_ptr, size_t>> q_;
     };
     
   }

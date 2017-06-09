@@ -98,7 +98,7 @@ namespace easytree {
     }
 
     template <typename Node>
-    auto depth_first_iterator<Node>::operator*() const -> value_type {
+    auto depth_first_iterator<Node>::operator*() const -> const value_type {
       return std::get<0>(q_.top());
     }
     
@@ -109,6 +109,79 @@ namespace easytree {
     
     template <typename Node>
     auto depth_first_iterator<Node>::operator++() -> type& {
+      if (q_.size() != 0) {
+        auto v = q_.top();
+        q_.pop();
+        for (auto& c : std::get<0>(v)->children_)
+          q_.push({c, std::get<1>(v) + 1});
+      }
+      return *this;
+    }
+
+
+    template <typename Node>
+    const_depth_first_iterator<Node>::const_depth_first_iterator() {
+    }
+
+    template <typename Node>
+    const_depth_first_iterator<Node>::const_depth_first_iterator(typename Node::type_ptr n) {
+      q_.push({n, 0});
+    }
+  
+    template <typename Node>
+    const_depth_first_iterator<Node>::const_depth_first_iterator(const type& other) :
+      q_(other.q_) {
+    }
+
+    template <typename Node>
+    const_depth_first_iterator<Node>::const_depth_first_iterator(const view::const_breadth_first_iterator<Node>& other) {
+      q_.push({*other, other.level()});
+    }
+  
+    template <typename Node>
+    const_depth_first_iterator<Node>::const_depth_first_iterator(type&& other) :
+      q_(std::move(other.q_)) {
+    }
+
+    template <typename Node>
+    auto const_depth_first_iterator<Node>::breadth_first_iterator() -> view::const_breadth_first_iterator<Node> {
+      return view::const_breadth_first_iterator<Node>(*this);
+    }
+    
+    template <typename Node>
+    void const_depth_first_iterator<Node>::swap(type& other) {
+      std::swap(q_, other.q_);
+    }
+  
+    template <typename Node>
+    auto const_depth_first_iterator<Node>::operator=(const type& other) -> type& {
+      type tmp(other);
+      swap(tmp);
+      return *this;
+    }
+
+    template <typename Node>
+    bool const_depth_first_iterator<Node>::operator==(const type& other) const {
+      return q_ == other.q_;
+    }
+  
+    template <typename Node>
+    bool const_depth_first_iterator<Node>::operator!=(const type& other) const {
+      return !(*this == other);
+    }
+
+    template <typename Node>
+    auto const_depth_first_iterator<Node>::operator*() const -> const reference {
+      return std::get<0>(q_.top());
+    }
+
+    template <typename Node>
+    size_t const_depth_first_iterator<Node>::level() const {
+      return std::get<1>(q_.top());
+    }
+    
+    template <typename Node>
+    auto const_depth_first_iterator<Node>::operator++() -> type& {
       if (q_.size() != 0) {
         auto v = q_.top();
         q_.pop();
