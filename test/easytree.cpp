@@ -4,6 +4,7 @@
 
 #include <easytree/tree>
 #include <easytree/breadth_first>
+#include <easytree/depth_first>
 
 SCENARIO("TDD") {
   using namespace easytree;
@@ -23,7 +24,6 @@ SCENARIO("TDD") {
 
     THEN("Test breadth-first") {
       std::vector<int> actual;
-
       for (auto& v : breadth_first<int>(tree)) {
         actual.push_back(**v);
       }
@@ -49,6 +49,36 @@ SCENARIO("TDD") {
         REQUIRE(actual != breadth_first<int>(tree).end());
         REQUIRE(actual.level() == 3);
       }
+    }
+
+    THEN("Test depth-first") {
+      std::vector<int> actual;
+      for (auto& v : depth_first<int>(tree)) {
+        actual.push_back(**v);
+      }
+      std::vector<int> expected{1, 8, 12, 9, 11, 10, 5, 7, 6, 4, 3, 2};
+      REQUIRE(actual == expected);
+
+      THEN("Test levels") {
+        std::vector<int> actual;
+        std::vector<int> expected{0, 1, 2, 2, 3, 3, 1, 2, 2, 1, 1, 1};
+        for (auto it = depth_first<int>(tree).begin();
+             it != depth_first<int>(tree).end(); ++it) {
+          actual.push_back(it.level());
+        }
+        REQUIRE(actual == expected);
+      }
+
+      THEN("Test STL find_if") {
+        auto actual = std::find_if(depth_first<int>(tree).begin(),
+                                   depth_first<int>(tree).end(),
+                                   [] (const decltype(tree)& n) {
+                                     return **n == 11;
+                                   });
+        REQUIRE(actual != depth_first<int>(tree).end());
+        REQUIRE(actual.level() == 3);
+      }
+      
     }
   }
   
