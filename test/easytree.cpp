@@ -23,11 +23,22 @@ SCENARIO("TDD") {
 
     THEN("Test breadth-first") {
       std::vector<int> actual;
+
       for (auto& v : breadth_first<int>(tree)) {
         actual.push_back(**v);
       }
       std::vector<int> expected{1, 2, 3, 4, 5, 8, 6, 7, 9, 12, 10, 11};
       REQUIRE(actual == expected);
+
+      THEN("Test levels") {
+        std::vector<int> actual;
+        std::vector<int> expected{0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3};
+        for (auto it = breadth_first<int>(tree).begin();
+             it != breadth_first<int>(tree).end(); ++it) {
+          actual.push_back(it.level());
+        }
+        REQUIRE(actual == expected);
+      }
 
       THEN("Test STL find_if") {
         auto actual = std::find_if(breadth_first<int>(tree).begin(),
