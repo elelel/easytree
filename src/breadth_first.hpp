@@ -160,7 +160,10 @@ namespace easytree {
 
     template <typename Node>
     bool const_breadth_first_iterator<Node>::operator==(const type& other) const {
-      return q_ == other.q_;
+      if ((q_.size() == 0) && (other.q_.size() == 0)) return true;
+      if ((q_.size() != 0) && (other.q_.size() != 0)) 
+        return q_.front() == other.q_.front();
+      return false;
     }
   
     template <typename Node>
