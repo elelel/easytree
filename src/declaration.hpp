@@ -30,7 +30,7 @@ namespace easytree {
 // Create subnode
 template <typename T>
 std::shared_ptr<easytree::tree::node<T>> operator<<(std::shared_ptr<easytree::tree::node<T>> lhs,
- std::shared_ptr<easytree::tree::node<T>> rhs);
+                                                    const std::shared_ptr<easytree::tree::node<T>>& rhs);
 
 
 // Declare
@@ -45,7 +45,7 @@ namespace easytree {
 
       // Create subnode
       friend std::shared_ptr<tree::node<T>> operator<<<T>(std::shared_ptr<tree::node<T>> lhs,
-                                                         std::shared_ptr<tree::node<T>> rhs);
+                                                         const std::shared_ptr<tree::node<T>>& rhs);
       friend struct view::breadth_first<type>;
       friend struct view::breadth_first_iterator<type>;
       friend struct view::const_breadth_first_iterator<type>;
