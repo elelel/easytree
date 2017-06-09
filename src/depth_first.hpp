@@ -56,7 +56,7 @@ namespace easytree {
     }
 
     template <typename Node>
-    depth_first_iterator<Node>::depth_first_iterator(const breadth_first_iterator<Node>& other) {
+    depth_first_iterator<Node>::depth_first_iterator(const view::breadth_first_iterator<Node>& other) {
       q_.push(*other);
     }
   
@@ -64,7 +64,12 @@ namespace easytree {
     depth_first_iterator<Node>::depth_first_iterator(type&& other) :
       q_(std::move(other.q_)) {
     }
-  
+
+    template <typename Node>
+    auto depth_first_iterator<Node>::breadth_first_iterator() -> view::breadth_first_iterator<Node> {
+      return view::breadth_first_iterator<Node>(*this);
+    }
+    
     template <typename Node>
     void depth_first_iterator<Node>::swap(type& other) {
       std::swap(q_, other.q_);

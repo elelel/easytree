@@ -109,6 +109,7 @@ namespace easytree {
       breadth_first_iterator(const type& other);
       breadth_first_iterator(const depth_first_iterator<Node>& other);
       breadth_first_iterator(type&& other);
+      auto depth_first_iterator() -> depth_first_iterator<Node>;
       void swap(type& other);
       type& operator=(const type& other);
 
@@ -157,6 +158,7 @@ namespace easytree {
       depth_first_iterator(const type& other);
       depth_first_iterator(const breadth_first_iterator<Node>& other);
       depth_first_iterator(type&& other);
+      auto breadth_first_iterator() -> breadth_first_iterator<Node>;
       void swap(type& other);
       type& operator=(const type& other);
 
