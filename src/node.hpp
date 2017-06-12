@@ -15,7 +15,7 @@ namespace easytree {
 
     template <typename T>
     auto node<T>::copy_by_value(const node<T>& other) -> type& {
-      value_ = other.value;
+      value_ = other.value_;
       children_.clear();
       for (const auto& c : other.children_) {
         children_.push_back(std::make_shared<type>(*c));
