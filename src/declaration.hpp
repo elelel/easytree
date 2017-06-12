@@ -63,6 +63,9 @@ namespace easytree {
       node();
       // Construct node with value
       node(T value);
+
+      // Deep copy other tree by value
+      type& copy_by_value(const node<T>& other);
       
       // Add child if doesn't exist
       void add_child(const type_ptr& rhs);
@@ -71,7 +74,6 @@ namespace easytree {
       const std::vector<type_ptr>& children() const;
     private:
       value_type value_;
-      //      type_ptr parent_;
       std::vector<type_ptr> children_;
     };
   }

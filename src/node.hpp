@@ -14,6 +14,16 @@ namespace easytree {
     }
 
     template <typename T>
+    auto node<T>::copy_by_value(const node<T>& other) -> type& {
+      value_ = other.value;
+      children_.clear();
+      for (const auto& c : other.children_) {
+        children_.push_back(std::make_shared<type>(*c));
+      }
+      return *this;
+    }
+
+    template <typename T>
     void node<T>::add_child(const type_ptr& rhs) {
       if (std::find(children_.begin(), children_.end(), rhs) == children_.end()) {
         children_.push_back(rhs);
